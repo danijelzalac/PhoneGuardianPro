@@ -1,0 +1,7 @@
+# GUI framework
+PyQt5>=5.15.0
+
+# MVT (Mobile Verification Toolkit)
+mvt==2.6.1
+
+# No other runtime dependencies are required
