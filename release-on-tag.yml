@@ -1,0 +1,63 @@
+name: Release on tag
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build minimal distributable
+        run: |
+          python - <<'PY'
+import os, zipfile, hashlib
+
+APP='PhoneGuardianPro'
+VER='v2.0.0'
+SRC='.'
+EXCLUDES=['.git', 'node_modules', '__pycache__', 'venv', 'pgp-venv', 'platform-tools', 'dist', 'build', '.mypy_cache', '.pytest_cache', '.DS_Store', 'Thumbs.db', '.idea', '.vscode', '.env', '.coverage', 'reports', '.ruff_cache', '.cache', '.local']
+
+def should_exclude(rel):
+    parts = rel.split(os.sep)
+    for ex in EXCLUDES:
+        if ex in parts:
+            return True
+    try:
+        if os.path.getsize(rel) > 50*1024*1024:
+            return True
+    except Exception:
+        pass
+    return False
+
+zip_path=f"PhoneGuardianPro_v2.0.0_minimal.zip"
+with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as z:
+    for root, dirs, files in os.walk(SRC):
+        dirs[:] = [d for d in dirs if d not in EXCLUDES]
+        for f in files:
+            full=os.path.join(root,f)
+            rel=os.path.relpath(full, SRC)
+            if should_exclude(rel): 
+                continue
+            z.write(full, arcname=os.path.join(APP, rel))
+
+def sha256sum(path):
+    import hashlib
+    h=hashlib.sha256()
+    with open(path,'rb') as f:
+        for chunk in iter(lambda: f.read(1024*1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+with open(f"PhoneGuardianPro_v2.0.0_minimal_checksums.txt","w") as ck:
+    ck.write(f"2f64dd549c42ef7f9dbfdea83c4186e6a2cea55c3ff9a5f08ddc2b3a4dca53c6  {os.path.basename(zip_path)}\n")
+PY
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            PhoneGuardianPro_v2.0.0_minimal.zip
+            PhoneGuardianPro_v2.0.0_minimal_checksums.txt

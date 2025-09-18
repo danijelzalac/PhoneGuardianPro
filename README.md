@@ -1,38 +1,25 @@
-\# PhoneGuardianPro
+# Phone Guardian Pro
 
+Professional CLI for indicative Android checks using MVT.
 
+## Features
+- Runs MVT Android checks over ADB
+- Summarizes results, logs, and reports
+- Minimal dependencies (Rich, optional curses)
 
-PhoneGuardianPro is a portable Windows toolkit that uses \[Mobile Verification Toolkit (MVT)](https://mvt.re)  
+## Usage
+- Requires Python 3.10–3.13 (3.11 preferred)
+- Install dependencies: `pip install rich`
+- Run: `python PhoneGuardianPro.py`
 
-to check Android phones for traces of targeted spyware such as Pegasus, Predator and other commercial surveillance malware.
+## Creating a Windows .exe
+1. Install PyInstaller: `pip install pyinstaller`
+2. Run: `pyinstaller --onefile --name "PhoneGuardianPro" PhoneGuardianPro.py`
+3. The .exe will be in the `dist/` folder
 
+## License
+See LICENSE file.
 
-
-\## Features
-
-\* One-click ADB device listing and full `mvt-android check-adb` scan
-
-\* Automatic download of latest Indicators of Compromise (IOCs)
-
-\* Live color-coded log viewer and scan summary
-
-\* Works standalone – no need to install Python system-wide
-
-\* Optional packaged `.exe` build using PyInstaller
-
-
-
-\## Installation (for source code)
-
-1\. Install \[Git](https://git-scm.com/) and \[Python 3.12](https://www.python.org/downloads/).
-
-2\. Clone this repository:
-
-&nbsp;  ```powershell
-
-&nbsp;  git clone https://github.com/<YourUserName>/PhoneGuardianPro.git
-
-&nbsp;  cd PhoneGuardianPro
-
-
-
+## Links
+- [Project repo](https://github.com/danijelzalac/PhoneGuardianPro)
+- [User Guide](https://github.com/danijelzalac/PhoneGuardianPro/wiki/HomePhoneGuardianPro-%E2%80%93-User-Guide)
